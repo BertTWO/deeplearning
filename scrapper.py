@@ -3,33 +3,35 @@ import shutil
 from icrawler.builtin import BingImageCrawler
 
 all_keywords = {
-    "headphones": [
-        "headphones", "over ear headphones", "headset",
-        "wireless headphones", "studio headphones",
-        "bluetooth headphones", "noise cancelling headphones",
-        "sony headphones", "gaming headset", "on ear headphones",
-        "headphones white background", "headphones product photo",
-        "audio headphones", "hifi headphones", "beats headphones",
-        "headphones isolated", "headphones top view", "professional headphones",
-        "headphones amazon", "bose headphones"
+    "slippers": [
+        "slippers", "house slippers", "bedroom slippers",
+        "slip on slippers", "indoor slippers", "fluffy slippers",
+        "men slippers", "women slippers", "foam slippers",
+        "slipper sandals", "slippers white background",
+        "slippers product photo", "slippers isolated",
+        "slippers top view", "rubber slippers", "flat slippers",
+        "slippers amazon", "home slippers", "open toe slippers",
+        "slippers pair"
     ],
-    "mug": [
-        "mug cup", "coffee mug", "ceramic mug",
-        "tea mug", "drinking mug", "white mug",
-        "custom mug", "large mug", "porcelain mug", "travel mug",
-        "coffee cup", "mug white background", "mug product photo",
-        "espresso cup", "hot drink mug", "mug isolated",
-        "mug top view", "mug amazon", "plain mug", "mug photography"
+    "motorcycle": [
+        "motorcycle", "motorbike", "sport motorcycle",
+        "cruiser motorcycle", "naked bike", "adventure motorcycle",
+        "dirt bike", "street motorcycle", "yamaha motorcycle",
+        "honda motorcycle", "kawasaki motorcycle", "suzuki motorcycle",
+        "motorcycle side view", "motorcycle white background",
+        "motorcycle isolated", "motorcycle product photo",
+        "motorcycle studio", "motorcycle amazon", "motorcycle full view",
+        "motorcycle photography"
     ],
-    "calculator": [
-        "calculator", "scientific calculator", "desk calculator",
-        "casio calculator", "school calculator",
-        "texas instruments calculator", "graphing calculator",
-        "basic calculator", "solar calculator", "math calculator",
-        "calculator white background", "calculator product photo",
-        "pocket calculator", "office calculator", "digital calculator",
-        "calculator isolated", "calculator top view", "calculator amazon",
-        "handheld calculator", "fx calculator"
+    "tv_remote": [
+        "tv remote control", "television remote", "remote control",
+        "smart tv remote", "universal remote", "samsung remote",
+        "lg remote control", "sony tv remote", "black remote control",
+        "remote control white background", "remote control isolated",
+        "remote control product photo", "remote control top view",
+        "remote control amazon", "cable remote", "infrared remote",
+        "home theater remote", "remote control buttons",
+        "slim remote control", "tv remote photography"
     ]
 }
 
@@ -37,7 +39,6 @@ for cls, keywords in all_keywords.items():
     for split, count in [("train", 240), ("validation", 30), ("test", 30)]:
         final_dir = f"./tf_classroom_data/{split}/{cls}"
         os.makedirs(final_dir, exist_ok=True)
-
         per_keyword = max(1, count // len(keywords))
 
         print(f"\n{'='*50}")
@@ -46,17 +47,15 @@ for cls, keywords in all_keywords.items():
         print(f"{'='*50}")
 
         file_counter = 0
-
         for i, kw in enumerate(keywords):
             temp_dir = f"./temp/{cls}_{split}_{i}"
             os.makedirs(temp_dir, exist_ok=True)
-
             print(f"  [Bing] {kw} → {per_keyword} images")
             try:
                 crawler = BingImageCrawler(
-                    feeder_threads=2,      # faster
-                    parser_threads=2,      # faster
-                    downloader_threads=4,  # faster
+                    feeder_threads=2,
+                    parser_threads=2,
+                    downloader_threads=4,
                     storage={"root_dir": temp_dir}
                 )
                 crawler.crawl(keyword=kw, max_num=per_keyword)
@@ -71,7 +70,6 @@ for cls, keywords in all_keywords.items():
                 dst = os.path.join(final_dir, new_name)
                 shutil.move(src, dst)
                 file_counter += 1
-
             shutil.rmtree(temp_dir)
 
         total = len(os.listdir(final_dir))
